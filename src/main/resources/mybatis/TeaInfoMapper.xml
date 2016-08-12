@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.entstudy.info.app.webservice.mapper.TeaInfoMapper">
+
+	<!--根据老师ID 名字验证信息 写卡的时候进行验证 -->
+	<select id="valiteainfo" resultType="Integer" parameterType="java.util.Map">
+		select count(*) from ct_v3t_teaInfo@kl_v3_test a
+		<where>
+			trim(a.cfteachername)=#{name}
+			and a.fid=#{encoding}
+		</where>
+	</select>
+	<!-- 根据老师ID 查询老师信息 -->
+	<select id="findByencoding" resultType="com.entstudy.info.app.webservice.model.TeaInfo"
+		parameterType="String">
+		select a.cfteachername name ,a.fid id from ct_v3t_teaInfo@kl_v3_test a
+		<where>
+			rownum &lt; = 1 and
+			a.fid=#{fid,jdbcType=VARCHAR}
+		</where>
+	</select>
+
+</mapper>

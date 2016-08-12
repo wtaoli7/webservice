@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.entstudy.info.app.webservice.mapper.StuInfoMapper">
+
+	<select id="findByNo" resultType="com.entstudy.info.app.webservice.model.StuInfo"
+		parameterType="String">
+		select a.cfstudentname name,a.fnumber fnumber from ct_v3s_studentinfo@kl_v3_test
+		a
+		<where>
+			rownum &lt; = 1
+			and a.fnumber=#{fNumber,jdbcType=VARCHAR}
+		</where>
+	</select>
+	
+	<!--根据老师ID 名字验证信息 写卡的时候进行验证  -->
+	<select id="valiStuInfo" resultType="Integer" parameterType="java.util.Map">
+	
+	select count(*) from ct_v3s_studentinfo@kl_v3_test a 
+	<where>
+	trim(a.cfstudentname)=#{name}
+	and a.fnumber=#{encoding}
+	</where>
+	
+	</select>
+
+
+</mapper>

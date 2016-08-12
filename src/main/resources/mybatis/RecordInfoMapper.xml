@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.entstudy.info.app.webservice.mapper.RecordInfoMapper">
+	<!-- 根据编码 和角色识别来插入考勤 -->
+	<insert id="insertAttenInfo" parameterType="java.util.Map">
+		insert into
+		tab_sign_record (id,sign_time,fnumber,role_type)
+		values(
+		seq_tab_sign_record.nextval,
+		#{time},
+		#{encoding},
+		#{role}
+		)
+	</insert>
+
+	<!--根据用户名和密码验证 -->
+	<select id="valiLoginInfo" resultType="int" parameterType="java.util.Map">
+		select count(*) from TAB_USER_INFO a where
+		a.username=#{username}
+		and a.password=#{password}
+	</select>
+
+	<!-- 插入持卡人信息 -->
+<!-- 	<insert id="insertCardInfo" parameterType="java.util.Map">
+		insert into
+		tab_card_record (id,encoding,role,active_time,card_id,username)
+		values(seq_tab_card_record.nextval,#{encoding},#{role},
+		#{action_time},#{cardid},#{username})
+	</insert> -->
+
+	<!--更改持卡人信息 -->
+
+<!-- 	<update id="updateCarfInfo" parameterType="java.util.Map">
+		update tab_card_record
+		a set
+		a.encoding=#{encoding} ,a.role=#{role} ,
+		a.active_time=#{action_time}
+		,username=#{username}
+		where
+		a.card_id=#{cardid}
+	</update> -->
+
+	<!-- 根据Card_id 查询持卡人信息 -->
+<!-- 	<select id="selectCardInfo" resultType="int" parameterType="java.util.Map">
+		select count(*) from tab_card_record a
+		where a.card_id=#{cardid}
+	</select> -->
+
+	<!--查询 更改或者插入 -->
+	<update id="valicard" parameterType="java.util.Map">
+		merge into
+		tab_card_record a
+		using (select #{cardid} as card_id from dual ) b
+		on(a.card_id=b.card_id)
+		
+		when matched then
+
+		update set
+		a.encoding=#{encoding} ,a.role=#{role} ,
+		a.active_time=#{action_time}
+		,username=#{username}
+		where
+		a.card_id=#{cardid}
+
+		when not matched then
+
+		insert
+		(id,encoding,role,active_time,card_id,username)
+		values (seq_tab_card_record.nextval,#{encoding},#{role},
+		#{action_time},#{cardid},#{username})
+
+	</update>
+</mapper>
